@@ -1,1 +1,106 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
 
+\title{\textbf{Análisis de Deflexión Elástica en Viga Simplemente Apoyada}}
+\author{Alan Rivera}
+\date{05 de octubre de 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Problema y objetivo}
+
+En el presente informe se plantea resolver un flujo de trabajo a partir de datos iniciales desordenados. El objetivo principal es la creación de un esquema de trabajo reproducible que posea una estructura legible, clara y ordenada.
+
+Además, se evaluará el comportamiento de la deflexión en el centro de la luz de una viga simplemente apoyada sometida a una carga puntual centrada, comparando los datos medidos experimentalmente con las predicciones del modelo elástico lineal de Euler-Bernoulli. \cite{hibbeler2017}.
+
+\section{Datos, Parámetros y Conversiones}
+Los parámetros geométricos y mecánicos del caso corresponden a:
+\begin{itemize}
+    \item Luz entre apoyos ($L$): $4{,}0\,\text{m}$
+    \item Base de la sección ($b$): $0{,}2\,\text{m}$
+    \item Altura de la sección ($h$): $0{,}4\,\text{m}$
+    \item Módulo de elasticidad ($E$): $25\,\text{GPa} = 25 \times 10^6\,\text{kN/m}^2$
+\end{itemize}
+
+\subsection{Cálculo del Segundo Momento de Área ($I$)}
+Para una sección rectangular, el segundo momento de área respecto al eje neutro se calcula como:
+\begin{equation}
+I = \frac{b \cdot h^3}{12} = \frac{0{,}2\,\text{m} \cdot (0{,}4\,\text{m})^3}{12} = 1{,}0667 \times 10^{-3}\,\text{m}^4
+\end{equation}
+
+\section{Método Teórico y Verificación Dimensional}
+La deflexión teórica en el centro de la luz ($\delta_{\text{teo}}$) según la teoría de Euler-Bernoulli viene dada por \cite{timoshenko1975}:
+\begin{equation}
+\delta_{\text{teo}} = \frac{P L^3}{48 E I}
+\end{equation}
+
+\subsection{Verificación de Unidades}
+Analizando las dimensiones de la fórmula:
+\begin{equation}
+[\delta] = \frac{[\text{kN}] \cdot [\text{m}]^3}{\left[\frac{\text{kN}}{\text{m}^2}\right] \cdot [\text{m}]^4} = \frac{[\text{kN}] \cdot [\text{m}]^3}{[\text{kN}] \cdot [\text{m}]^2} = [\text{m}]
+\end{equation}
+Al multiplicar el resultado por $1000\,\text{mm/m}$, se obtiene la deflexión directamente en milímetros ($\text{mm}$).
+
+\section{Resultados y Discusión}
+La Tabla~\ref{tab:resultados} resume la comparación entre los valores medidos y teóricos para cada nivel de carga.
+
+\begin{table}[h!]
+\centering
+\caption{Comparación de deflexión medida vs. teórica.}
+\label{tab:resultados}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Carga $P$ [kN]} & \textbf{$\delta_{\text{medida}}$ [mm]} & \textbf{$\delta_{\text{teo}}$ [mm]} & \textbf{Diferencia Rel. [\%]} & \textbf{$\delta/P$ [mm/kN]} \\
+\midrule
+0  & 0,00 & 0,00 & 0,00 & -- \\
+5  & 0,26 & 0,25 & 4,00 & 0,0520 \\
+10 & 0,50 & 0,50 & 0,00 & 0,0500 \\
+15 & 0,76 & 0,75 & 1,33 & 0,0507 \\
+20 & 1,01 & 1,00 & 1,00 & 0,0505 \\
+25 & 1,28 & 1,25 & 2,40 & 0,0512 \\
+30 & 1,54 & 1,50 & 2,67 & 0,0513 \\
+35 & 1,77 & 1,75 & 1,14 & 0,0506 \\
+40 & 2,05 & 2,00 & 2,50 & 0,0513 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/carga_deflexion.png}
+\caption{Relación Carga vs. Deflexión en el centro de la viga.}
+\label{fig:grafico}
+\end{figure}
+
+Como se observa en la Figura~\ref{fig:grafico}, la respuesta medida presenta una rigidez experimental levemente menor que la teórica, con diferencias relativas que no superan el $4{,}0\%$. La constancia aproximada del cociente $\delta/P \approx 0{,}051\,\text{mm/kN}$ ratifica el comportamiento elástico lineal.
+
+\section{Limitaciones y Conclusiones}
+\begin{itemize}
+    \item \textbf{Limitación del modelo:} La teoría de Euler-Bernoulli no contempla las deformaciones por cortante (efecto Timoshenko), lo que resulta aceptable en vigas esbeltas ($L/h = 10 \ge 10$), pero puede generar discrepancias si la altura aumentara significativamente.
+    \item \textbf{Conclusión:} La hipótesis de linealidad elástica describe adecuadamente los datos observados dentro del rango de cargas analizado ($0$ a $40\,\text{kN}$).
+\end{itemize}
+
+\bibliographystyle{plain}
+\bibliography{referencias}
+
+\appendix
+\section{Declaración de Uso de Inteligencia Artificial Generativa}
+
+\begin{description}
+    \item[Herramientas:] Gemini.
+    \item[Propósito:] Ayuda con del documento en \LaTeX{} para escribir el codigo y estructuración del repositorio según pauta.
+    \item[Tarea realizada:] Automatización del cálculo de la deflexión teórica $\delta_{\text{teo}}$ y generación del código para la figura carga-deflexión.
+    \item[Contenido incorporado:] Estructura de tablas, ecuaciones en sintaxis de \LaTeX{} y plantilla para la declaración de IA.
+    \item[Verificación:] Verificación visual del gráfico generado.
+    \item[Responsabilidad:] Se declara la autoría y comprensión total del material técnico expuesto.
+\end{description}
+
+\end{document}
